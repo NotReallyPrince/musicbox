@@ -1,5 +1,3 @@
-'use client';
-
 import {ReactNode, useEffect, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@/redux/hooks";
 import apiService from "@/services/api.service";
@@ -106,5 +104,3 @@ export default function PlayerProvider({children}: PlayerProviderProps) {
     {children}
   </>
 }
-
-export { playerEl }
