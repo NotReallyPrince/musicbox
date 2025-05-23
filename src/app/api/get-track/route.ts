@@ -1,11 +1,12 @@
-import {Innertube} from 'youtubei.js';
-import {NextApiRequest, NextApiResponse} from "next";
-import {formatTime} from "@/utils/player.utils";
+import { Innertube } from 'youtubei.js'
+import { NextResponse } from 'next/server'
+import { formatTime } from "@/utils/player.utils"
 
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const youtube = await Innertube.create();
-  const data = await youtube.getBasicInfo(req.body.id);
+export async function POST(request: Request) {
+  const body = await request.json()
+  const youtube = await Innertube.create()
+  const data = await youtube.getBasicInfo(body.id)
+  
   const track: YouTubeTrack = {
     id: data.basic_info.id!,
     author: {
@@ -30,7 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       text: (data.basic_info.view_count || 0).toString(),
     },
   }
-  res.json({
-    data: track,
-  })
+  
+  return NextResponse.json({ data: track })
 }
