@@ -1,3 +1,5 @@
+'use client';
+
 import styles from "@/styles/AppLayout.module.scss";
 import FooterPlayer from "@/components/app/FooterPlayer";
 import {Layout} from "antd";
