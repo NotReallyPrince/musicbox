@@ -106,5 +106,3 @@ export default function PlayerProvider({children}: PlayerProviderProps) {
     {children}
   </>
 }
-
-export { playerEl }
