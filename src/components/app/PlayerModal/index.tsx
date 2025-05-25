@@ -104,7 +104,7 @@ export default function PlayerModal() {
     <div className={styles.playerControls}>
       <ConfigProvider theme={{token: {colorPrimary: 'white'}}}>
         <Slider
-          max={currentTrack.duration.seconds}
+          max={currentTrack?.duration?.seconds || 30}
           min={0}
           value={seekTime}
           tooltip={{
