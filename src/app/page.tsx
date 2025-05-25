@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { setConnectSlice } from "@/redux/slices/connect.slice"
-import { lazy, useEffect, useState } from "react"
+import { Suspense, lazy, useEffect, useState } from "react"
 
 const ConnectDrawer = lazy(() => import('@/components/app/ConnectDrawer'))
 const SearchInput = lazy(() => import('@/components/shared/SearchInput'))
@@ -33,7 +33,9 @@ export default function Home() {
         />
         {isClient && (
           <div>
-            <SearchInput />
+            <Suspense fallback={<div>Loading...</div>}>
+              <SearchInput />
+            </Suspense>
           </div>
         )}
         <Badge
@@ -55,7 +57,11 @@ export default function Home() {
       <ExploreSection />
       <PlaylistsSection />
       <PlayHistorySection />
-      {isClient && <ConnectDrawer />}
+      {isClient && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <ConnectDrawer />
+        </Suspense>
+      )}
     </Layout>
   )
 }
