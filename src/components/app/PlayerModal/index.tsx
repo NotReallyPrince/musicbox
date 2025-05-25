@@ -136,7 +136,7 @@ export default function PlayerModal() {
           {formatTime(currentTime)}
         </Typography.Text>
         <Typography.Text className={styles.time}>
-          {formatTime(currentTrack.duration.seconds)}
+          {formatTime(currentTrack?.duration?.seconds || 30)}
         </Typography.Text>
       </div>
 
