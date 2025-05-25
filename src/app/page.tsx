@@ -3,7 +3,6 @@
 import { Badge, Button, Layout } from "antd"
 import { UsergroupAddOutlined } from "@ant-design/icons"
 import styles from "@/styles/Home.module.css"
-import SearchInput from "@/components/shared/SearchInput"
 import ExploreSection from "@/components/app/Home/ExploreSection"
 import PlaylistsSection from "@/components/app/Home/PlaylistsSection"
 import PlayHistorySection from "@/components/app/Home/PlayHistorySection"
@@ -14,6 +13,7 @@ import { setConnectSlice } from "@/redux/slices/connect.slice"
 import { lazy, useEffect, useState } from "react"
 
 const ConnectDrawer = lazy(() => import('@/components/app/ConnectDrawer'))
+const SearchInput = lazy(() => import('@/components/shared/SearchInput'))
 
 export default function Home() {
   const { connected, connections } = useAppSelector(state => state.connect)
@@ -31,7 +31,11 @@ export default function Home() {
           type={'text'}
           icon={<FontAwesomeIcon icon={faBars} />}
         />
-        {isClient && <SearchInput />}
+        {isClient && (
+          <div>
+            <SearchInput />
+          </div>
+        )}
         <Badge
           dot={!connected || connections.length === 0}
           count={connections.length > 0 ? connections.length : undefined}
