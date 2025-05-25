@@ -1,15 +1,17 @@
-import {AutoComplete} from "antd";
-import apiService from "@/services/api.service";
-import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
-import {useAppDispatch, useAppSelector} from "@/redux/hooks";
-import {setApp} from "@/redux/slices/app.slice";
-import {BaseOptionType} from "rc-select/es/Select";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHistory} from "@fortawesome/free-solid-svg-icons";
+'use client'; // Mark as client component for App Router
 
-export default function SearchInput({value}: {value?: string}) {
-  const {searchHistory} = useAppSelector(state => state.app);
+import { AutoComplete } from 'antd';
+import apiService from '@/services/api.service';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'; // Use next/navigation for App Router
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setApp } from '@/redux/slices/app.slice';
+import { BaseOptionType } from 'rc-select/es/Select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHistory } from '@fortawesome/free-solid-svg-icons';
+
+export default function SearchInput({ value }: { value?: string }) {
+  const { searchHistory } = useAppSelector((state) => state.app);
   const [actualValue, setActualValue] = useState('');
   const [suggestedOptions, setSuggestedOptions] = useState<BaseOptionType[]>([]);
   const [options, setOptions] = useState([]);
@@ -21,68 +23,68 @@ export default function SearchInput({value}: {value?: string}) {
   }, [value]);
 
   const doSearch = (value: string) => {
-    if (searchHistory.findIndex(x => x.toLowerCase().trim() === value.toLowerCase().trim())) {
-      dispatch(setApp({
-        searchHistory: [value, ...searchHistory]
-      }));
-    } else {
-      let newHistory = searchHistory.filter(x => x.toLowerCase().trim() !== value.toLowerCase().trim());
+    if (!value.trim()) return;
+    let newHistory = [...searchHistory];
+    const index = newHistory.findIndex(
+      (x) => x.toLowerCase().trim() === value.toLowerCase().trim()
+    );
+    if (index === -1) {
       newHistory.unshift(value);
-      dispatch(setApp({
-        searchHistory: newHistory,
-      }));
+    } else {
+      newHistory = [value, ...newHistory.filter((x, i) => i !== index)];
     }
-    return router.push('/search?q=' + encodeURIComponent(value))
-  }
-
-  const formatSearchItem = (item: string) => {
-    return {
-      value: item,
-      label: <>
-        <FontAwesomeIcon icon={faHistory}/>
-        <span style={{paddingLeft: 8}}>{item}</span>
-      </>,
-    }
+    dispatch(setApp({ searchHistory: newHistory }));
+    router.push(`/search?q=${encodeURIComponent(value)}`);
   };
+
+  const formatSearchItem = (item: string) => ({
+    value: item,
+    label: (
+      <>
+        <FontAwesomeIcon icon={faHistory} />
+        <span style={{ paddingLeft: 8 }}>{item}</span>
+      </>
+    ),
+  });
 
   useEffect(() => {
     if (actualValue && actualValue.trim()) {
-      setSuggestedOptions(searchHistory.filter((x) => {
-        return x.trim().toLowerCase().includes(actualValue.trim().toLowerCase());
-      }).filter((x, i) => {
-        // only takes 3 items
-        return i < 3;
-      }).map(formatSearchItem));
+      setSuggestedOptions(
+        searchHistory
+          .filter((x) => x.trim().toLowerCase().includes(actualValue.trim().toLowerCase()))
+          .slice(0, 3)
+          .map(formatSearchItem)
+      );
     } else {
-      setSuggestedOptions(searchHistory.filter((x, i) => {
-        return i < 3;
-      }).map(formatSearchItem));
+      setSuggestedOptions(searchHistory.slice(0, 3).map(formatSearchItem));
     }
-  }, [actualValue]);
+  }, [actualValue, searchHistory]);
 
-  return <AutoComplete
-    options={[...suggestedOptions, ...options]}
-    value={actualValue}
-    placeholder={'Search for songs...'}
-    showSearch={true}
-    style={{flex :1}}
-    onChange={value => setActualValue(value)}
-    onKeyDown={e => {
-      if (e.key === 'Enter') return doSearch(actualValue);
-    }}
-    onSearch={(value) => {
-      if (value.trim() === '') return setOptions([]);
-      apiService.searchSuggestion(value).then(response => {
-        if (response) {
-          setOptions(response.map((r: string) => {
-            return {
-              value: r,
-              label: r,
-            }
-          }));
-        }
-      });
-    }}
-    onSelect={(value) => doSearch(value)}
-  />
+  return (
+    <AutoComplete
+      options={[...suggestedOptions, ...options]}
+      value={actualValue}
+      placeholder="Search for songs..."
+      showSearch
+      style={{ flex: 1 }}
+      onChange={(value) => setActualValue(value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') doSearch(actualValue);
+      }}
+      onSearch={(value) => {
+        if (!value.trim()) return setOptions([]);
+        apiService.searchSuggestion(value).then((response) => {
+          if (response) {
+            setOptions(
+              response.map((r: string) => ({
+                value: r,
+                label: r,
+              }))
+            );
+          }
+        });
+      }}
+      onSelect={(value) => doSearch(value)}
+    />
+  );
 }
