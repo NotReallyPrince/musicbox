@@ -3,9 +3,7 @@ import { Lexend_Deca } from 'next/font/google'
 import '@/styles/globals.css'
 import AppLayout from '@/components/layouts/AppLayout'
 import PlayerLayout from '@/components/layouts/PlayerLayout'
-import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
-import { persistor, store } from '@/redux/store'
+import ReduxProvider from '@/components/providers/ReduxProvider'
 
 const lexendDeca = Lexend_Deca({ subsets: ['latin'], weight: ['300', '400', '500', '700'] })
 
@@ -22,15 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={lexendDeca.className}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <AppLayout>
-              <PlayerLayout>
-                {children}
-              </PlayerLayout>
-            </AppLayout>
-          </PersistGate>
-        </Provider>
+        <ReduxProvider>
+          <AppLayout>
+            <PlayerLayout>
+              {children}
+            </PlayerLayout>
+          </AppLayout>
+        </ReduxProvider>
       </body>
     </html>
   )
