@@ -1,10 +1,11 @@
 'use client'
 
 import ConfigProvider from 'antd/es/config-provider';
-import { darkAlgorithm } from 'antd/es/theme/interface';
+import { theme } from 'antd';
 import { ReactNode } from "react";
 import { Lexend_Deca } from "next/font/google";
 
+const { darkAlgorithm } = theme;
 const lexendDeca = Lexend_Deca({ subsets: ['latin'], weight: ['300', '400', '500', '700'] });
 
 interface ThemeProviderProps {

@@ -31,7 +31,7 @@ export default function Home() {
           type={'text'}
           icon={<FontAwesomeIcon icon={faBars} />}
         />
-        <SearchInput />
+        {isClient && <SearchInput />}
         <Badge
           dot={!connected || connections.length === 0}
           count={connections.length > 0 ? connections.length : undefined}
