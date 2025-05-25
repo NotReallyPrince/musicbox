@@ -1,6 +1,6 @@
 'use client'
 
-import styles from "../Playlist.module.scss"
+import styles from "@/styles/Playlist.module.scss"
 import { Button, ConfigProvider, message, Spin, theme, Typography } from "antd"
 import { LoadingOutlined } from "@ant-design/icons"
 import { useParams } from "next/navigation"
