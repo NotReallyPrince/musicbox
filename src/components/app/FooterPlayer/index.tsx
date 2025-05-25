@@ -73,7 +73,7 @@ export default function FooterPlayer() {
       <div
         className={styles.inner}
         style={{
-          width: `${(currentTime / (currentTrack?.duration?.seconds || 1)) * 100}%`
+          width: `${(currentTime / 30) * 100}%`
         }}
       />
     </div>
