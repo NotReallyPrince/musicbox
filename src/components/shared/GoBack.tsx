@@ -1,5 +1,5 @@
 import {Button} from "antd";
-import styles from "@/styles/Playlist.module.scss";
+import styles from "./GoBack.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
