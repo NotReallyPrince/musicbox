@@ -1,3 +1,5 @@
+'use client'
+
 import {ConfigProvider, theme} from "antd";
 import {ReactNode} from "react";
 import {Lexend_Deca} from "next/font/google";
