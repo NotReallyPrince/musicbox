@@ -28,7 +28,7 @@
     "sass": "^1.69.5",
     "unique-username-generator": "^1.2.0",
     "uuid": "^9.0.1",
-    "youtubei.js": "^10.1.0"
+    "youtubei.js": "^13.4.0"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.10",
