@@ -17,7 +17,7 @@ SHELL ["/bin/bash", "-c"]
 RUN echo 'retry_command() { \
     local retries=3; \
     local count=0; \
-    until "$@" || [ $count -eq $retries ]; do \
+    until command "$@" || [ $count -eq $retries ]; do \
         echo "Command failed, attempt $((count+1)) of $retries"; \
         count=$((count+1)); \
         sleep $((count*2)); \
@@ -36,18 +36,18 @@ RUN apt-get update -qq && \
 # Install node modules with retry mechanism
 COPY --link package.json yarn.lock ./
 RUN source /usr/local/bin/retry_command && \
-    retry_command "yarn install --frozen-lockfile --production=false --network-timeout 100000"
+    retry_command "command yarn install --frozen-lockfile --production=false --network-timeout 100000"
 
 # Copy application code
 COPY --link . .
 
 # Build application with retry mechanism
 RUN source /usr/local/bin/retry_command && \
-    retry_command "yarn run build"
+    retry_command "command yarn run build"
 
 # Remove development dependencies with retry mechanism
 RUN source /usr/local/bin/retry_command && \
-    retry_command "yarn install --production=true --network-timeout 100000"
+    retry_command "command yarn install --production=true --network-timeout 100000"
 
 # Final stage for app image
 FROM base
@@ -55,9 +55,9 @@ FROM base
 # Copy built application
 COPY --from=build /app /app
 
-# Add healthcheck
+# Add healthcheck using full path to curl
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:3000/ || exit 1
+    CMD /usr/bin/curl -f http://localhost:3000/ || exit 1
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
