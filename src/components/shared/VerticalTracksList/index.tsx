@@ -53,7 +53,7 @@ export default function VerticalTracksList({tracks, showFavorite, optionItems, s
                 {item.title?.text}
               </div>
               <div className={styles.searchResultItemTimer}>
-                {formatTime(item.duration.seconds || 0)}
+                {formatTime(item?.duration?.seconds || 0)}
               </div>
             </div>
           </div>
