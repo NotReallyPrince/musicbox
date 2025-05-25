@@ -3,7 +3,7 @@ import styles from "./GoBack.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import {useRouter} from "next/router";
+import { useRouter } from 'next/navigation';
 import {SizeType} from "antd/es/config-provider/SizeContext";
 
 interface GoBackProps {
